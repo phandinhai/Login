@@ -68,6 +68,7 @@ angular.module('starter.controllers', [])
 
             //---------------------------------------------- hàm lưu data
             $scope.save = function () {
+               
                 $scope.firstname = 'b';
                 $scope.lastname = 'b';
                 $scope.email = 'b';
@@ -86,10 +87,11 @@ angular.module('starter.controllers', [])
                 window.localStorage.setItem("username", $scope.data.username);
                 window.localStorage.setItem("password", $scope.data.password);
                 window.localStorage.setItem("companyname", $scope.data.companyname);
-
+                
                 if (!firstname)
                 {
                     $scope.firstname = 'a';
+                    
                 }if (!lastname )
                 {
                     $scope.lastname = 'a';
@@ -120,7 +122,10 @@ angular.module('starter.controllers', [])
                         if (response.data.success === true) {
                             $state.go("CreateAccountP2");
 
-                        } else {
+                        }if($scope.username === 'a'){
+                            response.data.message;
+                        }
+                        else {
                             $scope.error = response.data.message;
                             console.log($scope.error);
                         }
