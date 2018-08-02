@@ -1,0 +1,35 @@
+<ion-view  view-title="Login">
+    <ion-modal-view>
+
+        <ion-header-bar style="background-color: #111;">
+
+            <h3 class="title" style="text-align: center;color: white"  ><strong  >Wecome to GorillaDesk</strong></h3>
+
+        </ion-header-bar>
+        <ion-content>
+
+            <center>
+                <h2 style="font-style: italic;margin-top: 10px"> <strong>GolillaDesk</strong> </h2>
+                <div style="background-color: white; width: 95%;margin-top: 8px" class="list">
+
+                    <div  class = "row">
+                        <input style="border-bottom:  1px solid rgb(191, 191, 191);" class = "row {{username}} " type = "text" placeholder = "Username" ng-model="data.username" required />
+                    </div>
+                    <div  class = "row">
+                        <input  style="border-bottom:  1px solid rgb(191, 191, 191);" class = "row {{password}}" type = "password" placeholder = "Password" ng-model="data.password" required />
+                        
+                    </div>
+                    <div ng-if="error" style="height: 30px;padding-top: 4px"> <a style="color: #642f96">{{error}}</a></div>
+                </div>
+            </center>
+            <center>
+                <button class="button button-block button-positive" style="background-color: #642f96;width: 95%" type="submit" ng-click="login()" >Log in</button>
+            </center>
+            <div style="margin-left: 9px" ng-click="Create()">  Create an account  </div>
+            <khi><center>
+                    <img id="img" src="img/gorilla.png" width="50%" height="50%"  />
+                </center>
+            </khi>
+        </ion-content>
+    </ion-modal-view>
+</ion-view>

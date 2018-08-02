@@ -1,0 +1,46 @@
+<ion-view style="background-color: rgba(40,30,30,0.08);" view-title="GorillaDesk Sign up">
+    <ion-header-bar style="background-color: #111;" >
+        <h3 class="title" style="text-align: center; color: white"><strong  >GorillaDesk Sign up</strong></h3>
+    </ion-header-bar>
+    <ion-content>
+        <center>
+            <div  style="background-color: white; width: 95%;margin-top: 8px" class = "list">
+                <div class="row">
+                    <input class = "row {{companyphon}}" style="border-bottom:  1px solid rgb(191, 191, 191);" type = "text" placeholder = "Company Phone" ng-model="data.companyphon" required />
+                    
+                </div>
+                <div class = "row">
+                    <input class = "row {{streetaddress}}" style="border-bottom:  1px solid rgb(191, 191, 191);" type = "text" placeholder = "Street Address" ng-model="data.streetaddress" required />         
+                   
+                </div>
+                <div class="row" >
+                    <input class = "row {{apt_suite_floor}}" style="border-bottom:  1px solid rgb(191, 191, 191);" type = "text" placeholder = "Apt / Suite / Floor" ng-model="data.apt_suite_floor" required />
+                    
+                </div>
+
+                <div class = "row ">
+                    <input class = " {{city}} " ca style="border-bottom:  1px solid rgb(191, 191, 191);width: 50%;"  type = "text" placeholder = "City" ng-model="data.city" required />
+                    
+                    <input class = " {{sta}} " style="border-bottom:  1px solid rgb(191, 191, 191);width: 25%;" type = "text" placeholder = "Sta" ng-model="data.sta" required />
+                    
+                    <input class = " {{zipcode}} " style="border-bottom:  1px solid rgb(191, 191, 191);width: 25%;" type = "text" placeholder = "Zip Code" ng-model="data.zipcode" required />
+                    
+                </div>  
+                <div ng-if="error" style="height: 30px;padding-top: 4px"> <a style="color: #642f96">{{error}}</a></div>
+            </div>
+
+        </center>
+        <center>
+            <button style="background-color: #642f96;width: 96%" type="submit" class = "button button-positive  button-small button-block button-balanced" ng-click="save()">
+                Complete
+            </button>
+        </center>
+    </ion-content>       
+
+</ion-view>
+
+
+
+
+
+

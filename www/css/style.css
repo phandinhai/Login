@@ -1,0 +1,54 @@
+/* Empty. Add your own CSS if you like */
+ input.a[type=text] {
+    background-image:url(../img/chamthan.png); 
+    background-repeat: no-repeat; 
+    background-size: 22px;
+    background-position: right;
+   width: 100%;
+   
+   
+   box-sizing: border-box;
+   border: none;
+   border-bottom: 1px solid #9932CC;
+
+}
+input.a[type=password] {
+    background-image:url(../img/chamthan.png); 
+    background-repeat: no-repeat; 
+    background-size: 22px;
+    background-position: right;
+   width: 100%;
+   
+   
+   box-sizing: border-box;
+   border: none;
+   border-bottom: 1px solid #9932CC;
+}
+input.a[type=email] {
+    background-image:url(../img/chamthan.png); 
+    background-repeat: no-repeat; 
+    background-size: 22px;
+    background-position: right;
+   width: 100%;
+   
+  
+   box-sizing: border-box;
+   border: none;
+   border-bottom: 1px solid #9932CC;
+}  
+.a::-webkit-input-placeholder {
+
+ color: #9932CC;
+ font-weight: bold;    
+ font-style: italic; 
+}
+ khi {
+   width:100%;
+   position: absolute;
+   bottom:0;
+}
+img {
+   position: relative;
+   display: block;
+
+}
