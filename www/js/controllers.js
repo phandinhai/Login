@@ -8,6 +8,8 @@ angular.module('starter.controllers', [])
         /* --------------------------------------------begin Đăng Nhặp */
         .controller('DangNhapCtrl', function ($scope, $ionicPopup, $state, $ionicLoading, $http) {
             $scope.data = {};
+                $ionicLoading.show();
+                $ionicLoading.hide();
             $scope.login = function () {
                 $scope.username = 'b';
                 $scope.password = 'b';
@@ -60,12 +62,8 @@ angular.module('starter.controllers', [])
 
         /* --------------------------------------------begin Accuont */
         .controller('CreateAccountCtrl', function ($scope, $ionicModal, $state, $ionicPopup, $http) {
-
             $scope.data = {};
             $scope.$on('$ionicView.enter', function () {
-                $scope.fillData(true);
-                $scope.loadDropdown();
-
             });
 
             //---------------------------------------------- hàm lưu data
@@ -135,10 +133,8 @@ angular.module('starter.controllers', [])
 
         })
         .controller('CreateAccountP2Ctrl', function ($scope, $ionicModal, $state, $ionicPopup, $http) {
-
             $scope.data = {};
             $scope.$on('$ionicView.enter', function () {
-
             });
             //---------------------------------------- hàm lưu data
             $scope.save = function (response) {
