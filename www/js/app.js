@@ -77,7 +77,11 @@ angular.module('starter', ['ionic', 'starter.controllers'])
                                 templateUrl: 'templates/Account/CreateAccountP2.html',
                                 controller: 'CreateAccountP2Ctrl'
                     })
-
+                    .state('Fabric', {
+                        url: '/Fabric',
+                                templateUrl: 'templates/Fabric/Fabric.html',
+                                controller: 'FabricCtrl'
+                    })
                     .state('app.single', {
                         url: '/playlists/:playlistId',
                         views: {
@@ -87,6 +91,7 @@ angular.module('starter', ['ionic', 'starter.controllers'])
                             }
                         }
                     });
+                    
             // if none of the above states are matched, use this as the fallback
             $urlRouterProvider.otherwise('/login');
         });

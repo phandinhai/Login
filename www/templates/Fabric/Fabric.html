@@ -1,0 +1,27 @@
+<ion-view  view-title="Login">
+    <ion-modal-view>
+
+        <ion-header-bar style="background-color: #111;">
+
+            <h3 class="title" style="text-align: center;color: white"  ><strong  >Wecome to GorillaDesk</strong></h3>
+
+        </ion-header-bar>
+
+        <ion-content >
+            <div class = "list">
+                <canvas id="c" width="360%" height="450%" style="border:1px solid #ccc"></canvas>
+                <input style="background-color: #46b10f; color: white;" type="button" ng-click="Circle()" id="btnCircle" value="circle"/>
+                <input style="background-color: #009ACD; color: white" type="button" ng-click="Line()" id="btnEllipse" value="line"/>
+                <input style="background-color: #1874CD; color: white" type="button" ng-click="Hline()" id="btnHline" value="Hline"/>
+                <input style="background-color: #ef9611; color: white" type="button" id="btnMode" value="draw"/>
+                <button style="background-color: #ef113a; color: white" ng-click="del()">Delete</button>
+                <button ng-click="Addtext()">Add Text</button>
+               
+                <input type="color" id="myColor">     
+            </div>
+
+        </ion-content>
+
+    </ion-modal-view>
+</ion-view>
+
