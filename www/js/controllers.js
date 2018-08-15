@@ -1,4 +1,4 @@
-/* global http, dev, fabric */
+/* global http, dev, fabric, ctx */
 
 angular.module('starter.controllers', [])
 
@@ -97,7 +97,7 @@ angular.module('starter.controllers', [])
                 window.localStorage.setItem("companyname", $scope.data.companyname);
                 if (!firstname)
                 {
-                    $scope.firstname = 'a';
+                    $scope.firstname = 'a';//a,b là ẩn hiện dấu chấm than.
                 }
                 if (!lastname)
                 {
@@ -235,11 +235,15 @@ angular.module('starter.controllers', [])
 
 
         .controller('FabricCtrl', function ($scope, $ionicModal, $timeout) {
-            var canvas = new fabric.Canvas('c', {selection: false});
-            var circle, line, isDown, origX, origY;
-            var type = '';
 
+            var canvas = new fabric.Canvas('c', {selection: false}, {backgroundColor: "#0ff"});
+            canvas.renderTop();
+
+            var circle, line, isDown, origX, origY, ellipse;
+            var type = 'circle';
             var mode = 'draw';
+            var mode1 = 'circleF';
+            console.log(canvas.selection);
             function removeEvents() {
                 canvas.isDrawingMode = false;
                 canvas.selection = false;
@@ -247,6 +251,8 @@ angular.module('starter.controllers', [])
                 canvas.off('mouse:up');
                 canvas.off('mouse:move');
             }
+            ;
+
             function changeObjectSelection(value) {
 
                 canvas.forEachObject(function (obj) {
@@ -258,45 +264,264 @@ angular.module('starter.controllers', [])
                 if (e.keyCode === 'A'.charCodeAt(0)) {
                 }
             };
-            btnCircle.onclick = function () {
-                type = 'circle';
-            };
             btnEllipse.onclick = function () {
                 type = 'line';
             };
             btnHline.onclick = function () {
                 type = 'hline';
-                console.log(type);
             };
+        
             btnMode.onclick = function () {
                 removeEvents();
                 changeObjectSelection(true);
                 this.value = mode = mode === 'draw' ? 'select' : 'draw';
                 if (mode === 'select') {
+                     $scope.draws = true;
                     canvas.selection = true;
+                   
+                     console.log( $scope.draws);
                 } else {
-                    canvas.selection = false;
+                     $scope.draws = false;
+                    canvas.selection = true;
+                   
+                     console.log( $scope.draws);
                 }
             };
+            btnCircle.onclick = function () {
+                removeEvents();
+                changeObjectSelection(true);
+                this.value = mode1 = mode1 === 'circle' ? 'circleF' : 'circle';
+            };
+
             function extend(src, dest) {
                 for (var m in src)
                     dest[m] = src[m];
                 return dest;
             }
             changeObjectSelection(true);
+
+
             $scope.Hline = function () {
+                $scope.tb = false;
                 removeEvents();
                 changeObjectSelection(false);
                 if (mode === 'draw')
                     canvas.isDrawingMode = 1;
-                canvas.freeDrawingBrush.color = 'rgba(255,255,255,0.0)';
+                canvas.freeDrawingBrush.color = 'rgba(0,0,0,0.0)';
+
                 canvas.freeDrawingBrush.width = 10;
                 var color = document.getElementById("myColor").value;
+                console.log(color);
                 canvas.on('mouse:move', function () {
                     canvas.freeDrawingBrush.color = color;
                 });
+                canvas.on('mouse:up', function () {
+                    canvas.freeDrawingBrush.color = 'rgba(0,0,0,0.0)';
+                });
             };
 
+            canvas.on('object:added', function () {
+                if (!isRedoing) {
+                    h = [];
+                }
+                isRedoing = false;
+            });
+
+            var isRedoing = false;
+            var h = [];
+          
+            $scope.Undo = function () {
+                if (canvas.getObjects().length > 0) {
+                    h.push(canvas.getObjects().pop());
+                    canvas.renderAll();
+                   
+                }   
+               
+            };
+         
+            $scope.Redo = function () {
+                //console.log(canvas.getObjects());|| canvas._objects.length
+                if (h.length > 0) {
+                    isRedoing = true;
+                    canvas.add(h.pop());
+                    console.log(h.length + "-----redo");
+                }
+
+            };
+
+            $scope.del = function () {
+                var activeObject = canvas.getActiveObjects();
+
+                if (activeObject) {
+                    activeObject.forEach(function (object) {
+                        canvas.remove(object);
+                        console.log(object.length);
+
+                    });
+                    canvas.discardActiveObject();
+
+
+                }
+                canvas.renderAll();
+
+            };
+
+            $scope.clear = function () {
+                canvas.clear();
+            };
+
+            $scope.Arrow = function () {
+                $scope.tb = false;
+                removeEvents();
+                changeObjectSelection(false);
+                function drawArrow(fromx, fromy, tox, toy) {
+                    var angle = Math.atan2(toy - fromy, tox - fromx);
+                    var headlen = 5;  // arrow head size
+                    // bring the line end back some to account for arrow head.
+                    tox = tox - (headlen) * Math.cos(angle);
+                    toy = toy - (headlen) * Math.sin(angle);
+                    // calculate the points.
+                    var points = [
+                        {
+                            x: fromx, // start point
+                            y: fromy
+                        }, {
+                            x: fromx - (headlen / 4) * Math.cos(angle - Math.PI / 2),
+                            y: fromy - (headlen / 4) * Math.sin(angle - Math.PI / 2)
+                        }, {
+                            x: tox - (headlen / 4) * Math.cos(angle - Math.PI / 2),
+                            y: toy - (headlen / 4) * Math.sin(angle - Math.PI / 2)
+                        }, {
+                            x: tox - (headlen) * Math.cos(angle - Math.PI / 2),
+                            y: toy - (headlen) * Math.sin(angle - Math.PI / 2)
+                        }, {
+                            x: tox + (headlen) * Math.cos(angle), // tip
+                            y: toy + (headlen) * Math.sin(angle)
+                        }, {
+                            x: tox - (headlen) * Math.cos(angle + Math.PI / 2),
+                            y: toy - (headlen) * Math.sin(angle + Math.PI / 2)
+                        }, {
+                            x: tox - (headlen / 4) * Math.cos(angle + Math.PI / 2),
+                            y: toy - (headlen / 4) * Math.sin(angle + Math.PI / 2)
+                        }, {
+                            x: fromx - (headlen / 4) * Math.cos(angle + Math.PI / 2),
+                            y: fromy - (headlen / 4) * Math.sin(angle + Math.PI / 2)
+                        }, {
+                            x: fromx,
+                            y: fromy
+                        }
+                    ];
+                    var colors = document.getElementById("myColor").value;
+                    var pline = new fabric.Polyline(points, {
+
+                        fill: colors,
+                        stroke: colors,
+                        opacity: 1,
+                        strokeWidth: 1,
+                        originX: 'left',
+                        originY: 'top',
+                        selectable: false
+                    });
+                    canvas.add(pline);
+                    canvas.renderAll();
+                }
+
+                canvas.on('mouse:down', function () {
+                    var pointer = canvas.getPointer(event.e);
+                    startX = pointer.x;
+                    startY = pointer.y;
+                });
+                canvas.on('mouse:move', function () {
+
+                });
+                canvas.on('mouse:up', function () {
+                    var pointer = canvas.getPointer(event.e);
+                    endX = pointer.x;
+                    endY = pointer.y;
+                    drawArrow(startX, startY, endX, endY);
+
+
+                });
+            };
+            $scope.Ellipse = function () {
+                $scope.tb = false;
+                removeEvents();
+                changeObjectSelection(false);
+                //canvas.freeDrawingBrush.color=document.getElementById("myColor").value;
+             
+                var colors = document.getElementById("myColor").value;
+                canvas.on('mouse:down', function (o) {
+                    isDown = true;
+                    var pointer = canvas.getPointer(o.e);
+                    origX = pointer.x;
+                    origY = pointer.y;
+                    if (mode1 === "circle") {
+                        ellipse = new fabric.Ellipse({
+                            left: origX,
+                            top: origY,
+                            originX: 'left',
+                            originY: 'top',
+                            rx: pointer.x - origX,
+                            ry: pointer.y - origY,
+                            angle: 0,
+                            stroke: colors,
+                            strokeWidth: 3,
+                            fill: '',
+                            selectable: false
+
+                        });
+
+                    } else {
+                        ellipse = new fabric.Ellipse({
+                            left: origX,
+                            top: origY,
+                            originX: 'left',
+                            originY: 'top',
+                            rx: pointer.x - origX,
+                            ry: pointer.y - origY,
+                            angle: 0,
+                            stroke: colors,
+                            strokeWidth: 3,
+                            fill: colors,
+                            selectable: false
+                        });
+                    }
+                    canvas.add(ellipse);
+                });
+
+                canvas.on('mouse:move', function (o) {
+                    if (!isDown)
+                        return;
+                    var pointer = canvas.getPointer(o.e);
+                    var rx = Math.abs(origX - pointer.x) / 2;
+                    var ry = Math.abs(origY - pointer.y) / 2;
+                    if (rx > ellipse.strokeWidth) {
+                        rx -= ellipse.strokeWidth / 2;
+                    }
+                    if (ry > ellipse.strokeWidth) {
+                        ry -= ellipse.strokeWidth / 2;
+                    }
+                    ellipse.set({rx: rx, ry: ry});
+
+                    if (origX > pointer.x) {
+                        ellipse.set({originX: 'right'});
+                    } else {
+                        ellipse.set({originX: 'left'});
+                    }
+                    if (origY > pointer.y) {
+                        ellipse.set({originY: 'bottom'});
+                    } else {
+                        ellipse.set({originY: 'top'});
+                    }
+                    canvas.renderAll();
+
+                });
+
+                canvas.on('mouse:up', function () {
+                    ellipse.setCoords();
+                    isDown = false;
+                });
+            };
             $scope.Circle = function () {
                 removeEvents();
                 changeObjectSelection(false);
@@ -340,7 +565,6 @@ angular.module('starter.controllers', [])
                             break;
                     }
                     canvas.renderAll();
-                    circle.setCoords();
                 });
                 canvas.on('mouse:up', function (o) {
                     circle.setCoords();
@@ -348,75 +572,101 @@ angular.module('starter.controllers', [])
                 });
             };
 
-
-            $scope.Line = function () {
-                removeEvents();
-                changeObjectSelection(false);
+            $scope.Lines = function () {
                 canvas.on('mouse:down', function (o) {
-                    var colors = document.getElementById("myColor").value;
-                    if (mode === 'select')
-                        return;
                     isDown = true;
                     var pointer = canvas.getPointer(o.e);
-                    origX = pointer.x;
-                    origY = pointer.y;
-                    var commonOption = {
-                        left: origX, top: origY,
+                    var points = [pointer.x, pointer.y, pointer.x, pointer.y];
+                    line = new fabric.Line(points, {
                         strokeWidth: 5,
-                        stroke: colors,
-                        fill: null,
-                        strokeDashArray: [0, 0],
-                        selectable: false
-                    };
-                    switch (type) {
-                        case 'line':
-                            line = new fabric.Line([origX, origY, origX, origY], extend(commonOption, {
-                                originX: 'center', originY: 'center'
-                            }));
-                            canvas.add(line);
-                            break;
-                    }
+                        fill: 'red',
+                        stroke: 'red',
+                        originX: 'center',
+                        originY: 'center'
+                    });
+                    canvas.add(line);
+                });
+
+                canvas.on('mouse:move', function (o) {
+                    if (!isDown)
+                        return;
+                    var pointer = canvas.getPointer(o.e);
+                    line.set({x2: pointer.x, y2: pointer.y});
+                    canvas.renderAll();
+                });
+
+            };
+
+            $scope.Line = function () {
+                $scope.tb = false;
+                removeEvents();
+                changeObjectSelection(false);
+                var line = null;
+                canvas.on('mouse:down', function (o) {
+                    isDown = true;
+                    var pointer = canvas.getPointer(o.e);
+                    console.log(line);
+                    if (line) {
+                        line = new fabric.Line([line.get('x2'), line.get('y2'), pointer.x, pointer.y], {
+                            stroke: 'blue',
+                            hasControls: false,
+                            hasBorders: false,
+                            lockMovementX: true,
+                            lockMovementY: true,
+                            strokeWidth: 3,
+                            selectable: true,
+                            hoverCursor: 'default'
+                        });
+                        canvas.add(line);
+                        
+                     
+                    } else {
+                        line = new fabric.Line([pointer.x, pointer.y, pointer.x, pointer.y], {
+                            
+                            stroke: 'blue',
+                            hasControls: false,
+                            hasBorders: false,
+                            lockMovementX: true,
+                            strokeWidth: 3,
+                            lockMovementY: true,
+                            selectable: true,
+                            hoverCursor: 'default'
+                        });
+                       canvas.add(line);
+                       
+                    }   
                 });
                 canvas.on('mouse:move', function (o) {
                     if (!isDown)
                         return;
                     var pointer = canvas.getPointer(o.e);
-                    switch (type) {
-                        case 'line':
-                            line.set({x2: pointer.x, y2: pointer.y});
-                            break;
-                    }
+                    line.set({x2: pointer.x, y2: pointer.y});
+                    canvas.renderAll();
+                
+                });
+
+            };
+            $scope.Addtext = function () {
+                $scope.tb = true;
+                removeEvents();
+                changeObjectSelection(false);
+                var textOptions = {
+                    fontSize: 30,
+                    left: 20,
+                    top: 20,
+                    radius: 10,
+                    borderRadius: '50px',
+                    hasRotatingPoint: true
+                };
+                var textObject = new fabric.IText('Enter text here...', textOptions);
+                canvas.add(textObject).setActiveObject(textObject);
+                //console.log(canvas.getActiveObjects().text);
+                document.getElementById('title').addEventListener('keyup', function () {  
+                    textObject.text = document.getElementById('title').value;
                     canvas.renderAll();
                 });
-                canvas.on('mouse:up', function (o) {
-                    line.setCoords();
-                    isDown = false;
-                });
-
             };
-
-            $scope.del = function () {
-                var activeObject = canvas.getActiveObjects();
-                if (activeObject) {
-                    activeObject.forEach(function (object) {
-                        canvas.remove(object);
-                    });
-                    canvas.discardActiveObject();
-                }
-                canvas.renderAll();
-            };
-
-            $scope.Addtext = function () {
-                var colors = document.getElementById("myColor").value;
-                canvas.add(new fabric.IText('A', {
-                    left: 150,
-                    top: 50,
-                    fontFamily: 'arial black',
-                    fill: colors,
-                    fontSize: 40
-                }));
-            };
-
+            
         })
         .controller('PlaylistsCtrl', function ($scope) {
             $scope.playlists = [
@@ -428,6 +678,5 @@ angular.module('starter.controllers', [])
                 {title: 'Cowbell', id: 6}
             ];
         })
-
         .controller('PlaylistCtrl', function ($scope, $stateParams) {
         });
